@@ -1,29 +1,162 @@
-FastKuota Store body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; } h1, h2 { color: #333; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } table, th, td { border: 1px solid #ccc; } th, td { padding: 10px; text-align: center; } button { padding: 8px 16px; background: #28a745; color: white; border: none; cursor: pointer; } #cart, #confirmation, #adminLogin, #adminPanel { margin-top: 30px; background: #fff; padding: 15px; border: 1px solid #ccc; } .hidden { display: none; } input[type="text"], input[type="password"] { padding: 5px; width: 100%; margin-bottom: 10px; } 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FastKuota Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .product {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    button {
+      padding: 8px 16px;
+      background: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #cart, #confirmation, #adminLogin, #adminPanel {
+      margin-top: 30px;
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+    }
+    .hidden {
+      display: none;
+    }
+    input[type="text"], input[type="password"] {
+      padding: 5px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>FastKuota Store</h1>
+  <h2>Pulsa & Kuota Murah</h2>
 
-FastKuota Store
+  <div id="productList">
+    <div class="product">
+      <h3>Telkomsel 5GB</h3>
+      <p>Harga: Rp20.000</p>
+      <button onclick="addToCart('Telkomsel 5GB', 20000)">Beli</button>
+    </div>
+    <div class="product">
+      <h3>XL 10GB</h3>
+      <p>Harga: Rp25.000</p>
+      <button onclick="addToCart('XL 10GB', 25000)">Beli</button>
+    </div>
+    <div class="product">
+      <h3>Top Up Game Mobile Legends</h3>
+      <p>Harga: Rp10.000</p>
+      <button onclick="addToCart('ML Top Up', 10000)">Beli</button>
+    </div>
+  </div>
 
-Daftar Produk
+  <div id="cart">
+    <h2>Keranjang</h2>
+    <ul id="cartItems"></ul>
+    <p>Total: Rp<span id="totalPrice">0</span></p>
+    <button onclick="showConfirmation()">Lanjutkan ke Konfirmasi</button>
+  </div>
 
-OperatorProdukHargaAksiTelkomsel5GB20000BeliXL10GB25000BeliAxis3GB15000Beli 
+  <div id="confirmation" class="hidden">
+    <h2>Konfirmasi Pembelian</h2>
+    <ul id="confirmationItems"></ul>
+    <p>Total: Rp<span id="confirmationTotal">0</span></p>
+    <button onclick="checkout()">Bayar via WhatsApp</button>
+    <p><strong>Pembayaran:</strong></p>
+    <ul>
+      <li>DANA: 085813658750 a/n ridwan</li>
+      <li>ShopeePay: 085813658750 a/n ridwan</li>
+      <li>BRI: 0597 0100 9965 533 a/n ridwan kurnia</li>
+    </ul>
+  </div>
 
-Keranjang
+  <div id="adminLogin">
+    <h2>Login Admin</h2>
+    <input type="text" id="adminUser" placeholder="Username" />
+    <input type="password" id="adminPass" placeholder="Password" />
+    <button onclick="adminLogin()">Login</button>
+  </div>
 
-Total: Rp0
+  <div id="adminPanel" class="hidden">
+    <h2>Panel Admin</h2>
+    <p>Selamat datang, Admin!</p>
+  </div>
 
-Lanjutkan ke Konfirmasi 
+  <script>
+    let cart = [];
 
-Konfirmasi Pembelian
+    function addToCart(product, price) {
+      cart.push({ product, price });
+      updateCart();
+    }
 
-Total: Rp0
+    function updateCart() {
+      const cartItems = document.getElementById("cartItems");
+      const totalPrice = document.getElementById("totalPrice");
+      cartItems.innerHTML = "";
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.product} - Rp${item.price}`;
+        cartItems.appendChild(li);
+        total += item.price;
+      });
+      totalPrice.textContent = total;
+    }
 
-Bayar via WhatsApp 
+    function showConfirmation() {
+      document.getElementById("confirmation").classList.remove("hidden");
+      const confirmItems = document.getElementById("confirmationItems");
+      const confirmTotal = document.getElementById("confirmationTotal");
+      confirmItems.innerHTML = "";
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.product} - Rp${item.price}`;
+        confirmItems.appendChild(li);
+        total += item.price;
+      });
+      confirmTotal.textContent = total;
+    }
 
-Login Admin
+    function checkout() {
+      let pesan = "Halo, saya ingin pesan:
+";
+      cart.forEach(item => {
+        pesan += `- ${item.product} (Rp${item.price})
+`;
+      });
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      pesan += `Total: Rp${total}`;
+      const noWa = "6285813658750";
+      const encodedMessage = encodeURIComponent(pesan);
+      window.open(`https://wa.me/${noWa}?text=${encodedMessage}`, "_blank");
+    }
 
-Login 
-
-Panel Admin
-
-Selamat datang, Admin!
-
-let cart = []; function addToCart(product, price) { cart.push({ product, price }); updateCart(); } function updateCart() { const cartItems = document.getElementById("cartItems"); const totalPrice = document.getElementById("totalPrice"); cartItems.innerHTML = ""; let total = 0; cart.forEach(item => { const li = document.createElement("li"); li.textContent = `${item.product} - Rp${item.price}`; cartItems.appendChild(li); total += item.price; }); totalPrice.textContent = total; } function showConfirmation() { document.getElementById("confirmation").classList.remove("hidden"); const confirmItems = document.getElementById("confirmationItems"); const confirmTotal = document.getElementById("confirmationTotal"); confirmItems.innerHTML = ""; let total = 0; cart.forEach(item => { const li = document.createElement("li"); li.textContent = `${item.product} - Rp${item.price}`; confirmItems.appendChild(li); total += item.price; }); confirmTotal.textContent = total; } function checkout() { let pesan = "Halo, saya ingin pesan:\n"; cart.forEach(item => { pesan += `- ${item.product} (Rp${item.price})\n`; }); const total = cart.reduce((sum, item) => sum + item.price, 0); pesan += `Total: Rp${total}`; const noWa = "6285813658750"; const encodedMessage = encodeURIComponent(pesan); window.open(`https://wa.me/${noWa}?text=${encodedMessage}`, "_blank"); } function adminLogin() { const user = document.getElementById("adminUser").value; const pass = document.getElementById("adminPass").value; if (user === "admin" && pass === "1234") { document.getElementById("adminLogin").classList.add("hidden"); document.getElementById("adminPanel").classList.remove("hidden"); } else { alert("Login gagal. Coba lagi."); } } 
+    function adminLogin() {
+      const user = document.getElementById("adminUser").value;
+      const pass = document.getElementById("adminPass").value;
+      if (user === "admin" && pass === "1234") {
+        document.getElementById("adminLogin").classList.add("hidden");
+        document.getElementById("adminPanel").classList.remove("hidden");
+      } else {
+        alert("Login gagal. Coba lagi.");
+      }
+    }
+  </script>
+</body>
+</html>
