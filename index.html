@@ -1,106 +1,29 @@
+FastKuota Store body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; } h1, h2 { color: #333; } table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } table, th, td { border: 1px solid #ccc; } th, td { padding: 10px; text-align: center; } button { padding: 8px 16px; background: #28a745; color: white; border: none; cursor: pointer; } #cart, #confirmation, #adminLogin, #adminPanel { margin-top: 30px; background: #fff; padding: 15px; border: 1px solid #ccc; } .hidden { display: none; } input[type="text"], input[type="password"] { padding: 5px; width: 100%; margin-bottom: 10px; } 
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FastKuota Store</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; }
-    h1, h2 { color: #333; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    table, th, td { border: 1px solid #ccc; }
-    th, td { padding: 10px; text-align: center; }
-    button { padding: 8px 16px; background: #28a745; color: white; border: none; cursor: pointer; }
-    #cart { margin-top: 30px; background: #fff; padding: 15px; border: 1px solid #ccc; }
-    .payment-section { margin-top: 20px; padding: 15px; background: #fff; border: 1px solid #ccc; }
-    .payment-section img { width: 200px; display: block; margin-top: 10px; }
-  </style>
-</head>
-<body>
-  <h1>FastKuota Store</h1>
+FastKuota Store
 
-  <section>
-    <h2>Daftar Produk</h2>
-    <table id="productTable">
-      <thead>
-        <tr>
-          <th>Operator</th>
-          <th>Produk</th>
-          <th>Harga</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Telkomsel</td>
-          <td>5GB</td>
-          <td>20000</td>
-          <td><button onclick="addToCart('Telkomsel 5GB', 20000)">Beli</button></td>
-        </tr>
-        <tr>
-          <td>XL</td>
-          <td>10GB</td>
-          <td>25000</td>
-          <td><button onclick="addToCart('XL 10GB', 25000)">Beli</button></td>
-        </tr>
-        <tr>
-          <td>Axis</td>
-          <td>3GB</td>
-          <td>15000</td>
-          <td><button onclick="addToCart('Axis 3GB', 15000)">Beli</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+Daftar Produk
 
-  <section id="cart">
-    <h2>Keranjang</h2>
-    <ul id="cartItems"></ul>
-    <p><strong>Total:</strong> Rp<span id="totalPrice">0</span></p>
-    <button onclick="checkout()">Bayar via WhatsApp</button>
-  </section>
+OperatorProdukHargaAksiTelkomsel5GB20000BeliXL10GB25000BeliAxis3GB15000Beli 
 
-  <section class="payment-section">
-    <h2>Pembayaran via QRIS</h2>
-    <p>Scan kode QR berikut untuk membayar:</p>
-    <img src="https://i.imgur.com/L8XG8Tk.png" alt="QRIS Ridwan Kurnia">
-    <p><strong>Atas Nama:</strong> Ridwan Kurnia</p>
-    <p><strong>No QRIS:</strong> 059701009965533</p>
-  </section>
+Keranjang
 
-  <script>
-    let cart = [];
+Total: Rp0
 
-    function addToCart(product, price) {
-      cart.push({ product, price });
-      updateCart();
-    }
+Lanjutkan ke Konfirmasi 
 
-    function updateCart() {
-      const cartItems = document.getElementById("cartItems");
-      const totalPrice = document.getElementById("totalPrice");
-      cartItems.innerHTML = "";
-      let total = 0;
-      cart.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.product} - Rp${item.price}`;
-        cartItems.appendChild(li);
-        total += item.price;
-      });
-      totalPrice.textContent = total;
-    }
+Konfirmasi Pembelian
 
-    function checkout() {
-      let pesan = "Halo, saya ingin pesan:\n";
-      cart.forEach(item => {
-        pesan += `- ${item.product} (Rp${item.price})\n`;
-      });
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      pesan += `Total: Rp${total}`;
-      const encodedMessage = encodeURIComponent(pesan);
-      window.open(`https://wa.me/6285813658750?text=${encodedMessage}`, "_blank");
-    }
-  </script>
-</body>
-</html>
+Total: Rp0
+
+Bayar via WhatsApp 
+
+Login Admin
+
+Login 
+
+Panel Admin
+
+Selamat datang, Admin!
+
+let cart = []; function addToCart(product, price) { cart.push({ product, price }); updateCart(); } function updateCart() { const cartItems = document.getElementById("cartItems"); const totalPrice = document.getElementById("totalPrice"); cartItems.innerHTML = ""; let total = 0; cart.forEach(item => { const li = document.createElement("li"); li.textContent = `${item.product} - Rp${item.price}`; cartItems.appendChild(li); total += item.price; }); totalPrice.textContent = total; } function showConfirmation() { document.getElementById("confirmation").classList.remove("hidden"); const confirmItems = document.getElementById("confirmationItems"); const confirmTotal = document.getElementById("confirmationTotal"); confirmItems.innerHTML = ""; let total = 0; cart.forEach(item => { const li = document.createElement("li"); li.textContent = `${item.product} - Rp${item.price}`; confirmItems.appendChild(li); total += item.price; }); confirmTotal.textContent = total; } function checkout() { let pesan = "Halo, saya ingin pesan:\n"; cart.forEach(item => { pesan += `- ${item.product} (Rp${item.price})\n`; }); const total = cart.reduce((sum, item) => sum + item.price, 0); pesan += `Total: Rp${total}`; const noWa = "6285813658750"; const encodedMessage = encodeURIComponent(pesan); window.open(`https://wa.me/${noWa}?text=${encodedMessage}`, "_blank"); } function adminLogin() { const user = document.getElementById("adminUser").value; const pass = document.getElementById("adminPass").value; if (user === "admin" && pass === "1234") { document.getElementById("adminLogin").classList.add("hidden"); document.getElementById("adminPanel").classList.remove("hidden"); } else { alert("Login gagal. Coba lagi."); } } 
